@@ -1,7 +1,13 @@
 require("dotenv").config();
 const fs = require("fs");
 const path = require("path");
-const { Client, Events, Collection, GatewayIntentBits } = require("discord.js");
+const {
+  Client,
+  Events,
+  Collection,
+  GatewayIntentBits,
+  ActivityType,
+} = require("discord.js");
 const { TOKEN } = process.env;
 
 // Create a new client instance
@@ -33,6 +39,23 @@ for (const file of commandFiles) {
 
 // Ready Event
 client.once(Events.ClientReady, (c) => {
+  // Set Status to the bot
+
+  c.user.setActivity("Goodnight people 😴💤", {
+    type: ActivityType.Watching,
+  });
+
+  const statuses = [
+    "Goodnight people 😴💤",
+    "Use /create to short your links 🤙",
+  ];
+
+  let status = statuses[Math.floor(Math.random() * statuses.lenght)];
+
+  setInterval(() => {
+    c.user.setActivity(status, { type: ActivityType.Watching });
+  }, 5000);
+
   console.log(`Ready! Logged in as ${c.user.tag}`);
 });
 
