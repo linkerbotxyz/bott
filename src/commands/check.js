@@ -21,44 +21,43 @@ module.exports = {
     });
 
     if (!id) {
-      interaction.reply("**ID IS REQUIRED**");
+      return;
     } else {
       const checkLink = client.getLink(id);
 
-      checkLink.then((link) => {
-        const linkEmbed = new EmbedBuilder()
-          .setColor(process.env.MAIN_COLOR)
-          .setTitle("Checked!")
-          .setDescription(`\n✅ Your link was checked successfully!`)
-          .addFields(
-            {
-              name: "Original link",
-              value: link.original,
-              inline: true,
-            },
-            {
-              name: "Id",
-              value: link.short,
-              inline: true,
-            }
-          )
-          .setTimestamp()
-          .setFooter({
-            text: `Requested by ${interaction.user.username}#${interaction.user.discriminator}`,
-            iconURL: `https://cdn.discordapp.com/avatars/${interaction.user.id}/${interaction.user.avatar}`,
-          })
-          .catch((e) => {
-            const errorEmbed = new EmbedBuilder()
-              .setColor("Red")
-              .setDescription(
-                `❌ The provided id is not valid... Please try agian with a valid id`
-              );
+      checkLink
+        .then((link) => {
+          const linkEmbed = new EmbedBuilder()
+            .setColor(process.env.MAIN_COLOR)
+            .setTitle("Checked!")
+            .setDescription(`\n✅ Your link was checked successfully!`)
+            .addFields(
+              {
+                name: "Original link",
+                value: link.original,
+                inline: true,
+              },
+              {
+                name: "Id",
+                value: link.short,
+                inline: true,
+              }
+            )
+            .setTimestamp()
+            .setFooter({
+              text: `Requested by ${interaction.user.username}#${interaction.user.discriminator}`,
+              iconURL: `https://cdn.discordapp.com/avatars/${interaction.user.id}/${interaction.user.avatar}`,
+            });
 
-            interaction.reply({ embeds: [errorEmbed] });
-          });
-
-        interaction.reply({ embeds: [linkEmbed] });
-      });
+          interaction.reply({ embeds: [linkEmbed] });
+        })
+        .catch((e) => {
+          const errorEmbed = new EmbedBuilder()
+            .setColor("Red")
+            .setDescription(
+              `❌ The provided id is not valid... Please try agian with a valid id`
+            );
+        });
     }
   },
 };

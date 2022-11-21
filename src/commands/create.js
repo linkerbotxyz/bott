@@ -21,7 +21,7 @@ module.exports = {
     });
 
     if (!url) {
-      interaction.reply("**LINK IS REQUIRED**");
+      return;
     } else {
       const newLink = client.create(url);
 
