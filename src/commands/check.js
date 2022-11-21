@@ -28,8 +28,6 @@ module.exports = {
 
       checkLink
         .then((link) => {
-          const linkDate = moment(link.createdAt).fromNow();
-
           const linkEmbed = new EmbedBuilder()
             .setColor(process.env.MAIN_COLOR)
             .setTitle("Checked!")
@@ -43,12 +41,6 @@ module.exports = {
               {
                 name: "id",
                 value: link.short,
-                inline: true,
-              },
-
-              {
-                name: "Created At:",
-                value: linkDate,
                 inline: true,
               }
             )
@@ -68,6 +60,8 @@ module.exports = {
             .setDescription(
               `❌ The provided id is not valid... Please try agian with a valid id`
             );
+
+          interaction.reply({ embeds: [errorEmbed] });
         });
     }
   },
