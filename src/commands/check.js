@@ -1,6 +1,7 @@
 require("dotenv").config();
 const { SlashCommandBuilder, EmbedBuilder } = require("discord.js");
 const LinkerClient = require("linker.js").Client;
+const Moment = require("moment");
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -27,6 +28,8 @@ module.exports = {
 
       checkLink
         .then((link) => {
+          const linkDate = moment(link.createdAt).fromNow();
+
           const linkEmbed = new EmbedBuilder()
             .setColor(process.env.MAIN_COLOR)
             .setTitle("Checked!")
@@ -38,8 +41,14 @@ module.exports = {
                 inline: true,
               },
               {
-                name: "Id",
+                name: "id",
                 value: link.short,
+                inline: true,
+              },
+
+              {
+                name: "Created At:",
+                value: linkDate,
                 inline: true,
               }
             )
@@ -48,6 +57,8 @@ module.exports = {
               text: `Requested by ${interaction.user.username}#${interaction.user.discriminator}`,
               iconURL: `https://cdn.discordapp.com/avatars/${interaction.user.id}/${interaction.user.avatar}`,
             });
+
+          console.log(link);
 
           interaction.reply({ embeds: [linkEmbed] });
         })

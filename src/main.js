@@ -10,6 +10,7 @@ const {
 } = require("discord.js");
 const { TOKEN } = process.env;
 const Logger = require("./utils/Logger");
+const { EmbedBuilder } = require("discord.js");
 const Time = Date.now();
 
 // Create a new client instance
@@ -84,6 +85,73 @@ client.on(Events.InteractionCreate, async (interaction) => {
       ephemeral: true,
     });
   }
+});
+
+// Guild Create
+client.on("guildCreate", (guild) => {
+  let embed = new EmbedBuilder()
+    .setTitle("New Server!")
+    .setColor("Green")
+    .setDescription(`I joined the server **${guild.name}(${guild.id})**`)
+    .addFields(
+      {
+        name: "Name",
+        value: guild.name,
+        inline: true,
+      },
+      {
+        name: "ID",
+        value: guild.id,
+        inline: true,
+      },
+
+      {
+        name: "Member Count",
+        value: guild.memberCount,
+        inline: true,
+      },
+      {
+        name: "Owner",
+        value: guild.ownerId,
+        inline: true,
+      }
+    )
+    .setTimestamp();
+
+  client.channels.cache.get("1041133794880655380").send({ embeds: [embed] });
+});
+
+client.on("guildDelete", (guild) => {
+  let embed = new EmbedBuilder()
+    .setTitle("Left Server!")
+    .setColor("Red")
+    .setDescription(`I left the server **${guild.name}(${guild.id})**`)
+    .addFields(
+      {
+        name: "Name",
+        value: guild.name,
+        inline: true,
+      },
+      {
+        name: "ID",
+        value: guild.id,
+        inline: true,
+      },
+
+      {
+        name: "Member Count",
+        value: guild.memberCount,
+        inline: true,
+      },
+      {
+        name: "Owner",
+        value: guild.ownerId,
+        inline: true,
+      }
+    )
+    .setTimestamp();
+
+  client.channels.cache.get("1041133794880655380").send({ embeds: [embed] });
 });
 
 client.login(TOKEN);
