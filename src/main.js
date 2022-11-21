@@ -9,6 +9,8 @@ const {
   ActivityType,
 } = require("discord.js");
 const { TOKEN } = process.env;
+const Logger = require("./utils/Logger");
+const Time = Date.now();
 
 // Create a new client instance
 const client = new Client({
@@ -31,8 +33,8 @@ for (const file of commandFiles) {
   if ("data" in command && "execute" in command) {
     client.commands.set(command.data.name, command);
   } else {
-    console.log(
-      `[WARNING] The command at ${filePath} is missing a required "data" or "execute" property.`
+    new Logger("WARN").log(
+      `The command at ${filePath} is missing a required "data" or "execute" property.`
     );
   }
 }
@@ -56,7 +58,8 @@ client.once(Events.ClientReady, (c) => {
     c.user.setActivity(status, { type: ActivityType.Watching });
   }, 5000);
 
-  console.log(`Ready! Logged in as ${c.user.tag}`);
+  new Logger("INFO").log(`Logged in as ${c.user.tag}`);
+  new Logger("INFO").log(`Client started in ${Date.now() - Time}ms`);
 });
 
 // InteractionCreate Event
@@ -66,7 +69,9 @@ client.on(Events.InteractionCreate, async (interaction) => {
   const command = interaction.client.commands.get(interaction.commandName);
 
   if (!command) {
-    console.error(`No command matching ${interaction.commandName} was found.`);
+    new Logger("ERROR").log(
+      `No command matching ${interaction.commandName} was found.`
+    );
     return;
   }
 
@@ -75,7 +80,7 @@ client.on(Events.InteractionCreate, async (interaction) => {
   } catch (error) {
     console.error(error);
     await interaction.reply({
-      content: "There was an error while executing this command!",
+      content: "❌ There was an error while executing this command!",
       ephemeral: true,
     });
   }

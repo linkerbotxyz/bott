@@ -2,6 +2,7 @@ require("dotenv").config();
 const { REST, Routes } = require("discord.js");
 const { TOKEN, CLIENT_ID } = process.env;
 const fs = require("node:fs");
+const Logger = require("./utils/Logger");
 
 const commands = [];
 
@@ -18,7 +19,7 @@ const rest = new REST({ version: "10" }).setToken(TOKEN);
 
 (async () => {
   try {
-    console.log(
+    new Logger("INFO").log(
       `Started refreshing ${commands.length} application (/) commands.`
     );
 
@@ -26,7 +27,7 @@ const rest = new REST({ version: "10" }).setToken(TOKEN);
       body: commands,
     });
 
-    console.log(
+    new Logger("SUCCESS").log(
       `Successfully reloaded ${data.length} application (/) commands.`
     );
   } catch (error) {
